@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Eternal Valentine's Wish</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    background: url("back.png") no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    font-family: 'Quicksand', serif;
+    letter-spacing: 1px;
+    text-align: center;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ====== ЛОК СКРИН ====== */
+#lockScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(38, 0, 24, 0.75);
+    backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    transition: opacity 0.8s ease;
+}
+
+.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.lock-title {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.unlock-btn {
+    padding: 15px 50px;
+    font-size: 20px;
+    background:  rgba(255, 236, 246);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.unlock-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px  rgba(255, 236, 246, 0.8);
+}
+
+/* ====== ОСНОВНОЙ САЙТ ====== */
+button {
+    padding: 15px 40px;
+    font-weight: bold;
+    font-size: 18px;
+    font-family: 'Quicksand', serif;
+    letter-spacing: 1px;
+    background: gold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.banner-container {
+    width: 900px;
+    max-width: 90%;
+    margin: 40px auto;
+    border-radius: 30px;
+    overflow: hidden;
+    position: relative;
+
+    border: 3px solid rgba(255, 236, 246);
+
+    box-shadow:
+        0 0 15px rgba(255, 236, 246, 0.6),
+        0 0 40px rgba(255, 236, 246, 0.5),
+        0 0 80px rgba(255, 236, 246, 0.3);
+}
+
+.banner-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Панель внизу */
+.wish-panel {
+    position: fixed;
+    bottom: 40px;
+    right: 60px;
+}
+
+/* Кнопка */
+.wish-btn {
+    background:  rgba(255, 236, 246);
+    border: none;
+    border-radius: 40px;
+    padding: 15px 50px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.wish-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px  rgba(255, 236, 246, 0.8);
+}
+
+
+/* Текст */
+.wish-text {
+    display: block;
+}
+
+/* Блок стоимости */
+.wish-cost {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+    font-size: 16px;
+}
+
+/* Иконка молитвы */
+.wish-icon {
+    width: 20px;
+    margin-right: 5px;
+}
+
+/* Универсальный оверлей */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(38, 0, 24);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    transition: opacity 0.5s ease;
+}
+#shopOverlay {
+    background: rgba(38, 0, 24, 0.75);
+    backdrop-filter: blur(6px);
+}
+.shop-window {
+    position: relative;
+    z-index: 1;
+}
+.hidden {
+    display: none;
+}
+
+/* Анимация крутки */
+.spin-circle {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 236, 246);
+    animation: spin 1s linear infinite, glowPulse 1.5s ease-in-out infinite;
+  box-shadow:
+    0 0 8px rgba(255, 236, 246, 0.7),
+    0 0 25px rgba(255, 236, 246, 0.6),
+    0 0 50px rgba(255, 236, 246, 0.4);
+
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+@keyframes glowPulse {
+    0%, 100% {
+        box-shadow:
+            0 0 10px rgba(255, 236, 246, 0.8),
+            0 0 20px rgba(255, 236, 246, 0.6),
+            0 0 40px rgba(255, 236, 246, 0.47);
+    }
+    50% {
+        box-shadow:
+            0 0 25px rgba(255, 236, 246, 0.8),
+            0 0 50px rgba(255, 236, 246, 0.9),
+            0 0 80px rgba(255, 236, 246, 0.6);
+    }
+}
+/* Экран результата */
+.result-box {
+    font-size: 32px;
+    text-align: center;
+    animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.top-bar {
+    position: fixed;
+    top: 25px;
+    right: 40px;
+    background: rgba(0,0,0,0.4);
+    padding: 8px 18px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.top-icon {
+    width: 22px;
+    margin-right: 8px;
+}
+
+.shop-button-wrapper {
+    position: fixed;
+    bottom: 40px;
+    left: 60px;
+}
+
+.shop-btn {
+    background: rgba(255, 236, 246);
+    border: none;
+    border-radius: 30px;
+    padding: 12px 40px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.shop-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px  rgba(255, 236, 246, 0.8);
+}
+
+
+
+.shop-window {
+    width: 85%;
+    height: 85%;
+    background: rgba(38, 0, 24, 0.95);
+    display: flex;
+    border-radius: 20px;
+    overflow: hidden;
+}
+.shop-menu {
+    width: 260px;
+    background: rgba(66, 32, 53);
+    padding-top: 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+.shop-tab {
+    padding: 20px 30px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #ddd;
+    transition: 0.3s;
+}
+
+.shop-tab:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.shop-tab.active {
+    background: rgb(253, 96, 123);
+    color: rgba(66, 32, 53);
+    font-weight: bold;
+}
+.shop-content {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+}
+.shop-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 30px;
+}
+.shop-img {
+    width: 100px;
+    margin-bottom: 15px;
+}
+
+.shop-amount {
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.shop-card {
+    background: rgba(255, 236, 246);
+    border: none;
+    padding: 30px;
+    border-radius: 15px;
+    color: black;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.shop-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px  rgba(255, 236, 246, 0.8);
+}
+
+.big-offer-card {
+    position: relative; /* важно для позиционирования кнопки */
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.purchase-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+
+    padding: 12px 30px;
+    border-radius: 30px;
+    border: none;
+
+    background: rgba(255, 236, 246);
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.purchase-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 236, 246, 0.8);
+}
+
+.purchase-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.big-offer-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;    /* или contain — если не хочешь обрезки */
+    display: block;
+}
+.close-shop {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(255, 236, 246);
+    border: none;
+    border-radius: 50%;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+    padding: 0;
+}
+.item-modal-content {
+    background: rgba(38,0,24,0.95);
+    padding: 40px;
+    border-radius: 20px;
+    max-width: 1100px;
+    width: 90%;
+    text-align: center;   /* ← ВОТ ЭТО */
+}
+
+.item-layout {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* центрируем по горизонтали */
+    gap: 60px;
+    margin: 0 auto;          /* центрируем сам блок */
+}
+
+.item-layout img {
+    max-width: 55vw;
+    max-height: 70vh;   /* ← ограничение по высоте */
+    width: auto;
+    height: auto;
+    border-radius: 25px;
+
+    box-shadow:
+        0 0 30px rgba(255, 236, 246, 0.6),
+        0 0 80px rgba(255, 236, 246, 0.4);
+}
+
+.modal-img {
+    width: 500px;
+    border-radius: 20px;
+    box-shadow:
+        0 0 15px rgba(255, 236, 246, 0.6),
+        0 0 40px rgba(255, 236, 246, 0.4);
+}
+
+.item-story {
+    max-width: 450px;
+    font-size: 18px;
+    line-height: 1.7;
+    color: #fff;
+    opacity: 0.9;
+}
+
+.item-story p {
+    margin-bottom: 20px;
+}
+
+/* 📱 адаптив */
+@media (max-width: 1000px) {
+    .item-layout {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .modal-img {
+        width: 100%;
+    }
+
+    .item-story {
+        max-width: 100%;
+    }
+}
+.yt-button {
+    display: inline-block;
+    padding: 14px 28px;
+    margin-top: 20px;
+    background: linear-gradient(135deg, #ff3c3c, #ff0000);
+    color: white;
+    font-size: 18px;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.yt-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255,0,0,0.5);
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🔒 ЛОК СКРИН -->
+<div id="lockScreen">
+    <div class="lock-title">🔒 A Special Event is Locked</div>
+    <button class="unlock-btn" onclick="unlock()">Unlock</button>
+</div>
+
+<div class="banner-container">
+    <img src="banner.jpg" class="banner-image">
+</div>
+
+<!-- 🔊 Звук -->
+<audio id="unlockSound">
+    <source src="unlock.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="backMusic" loop>
+    <source src="back-music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let wishesAvailable = 2000; 
+let pity4 = 0;
+let pity5 = 0;
+
+let obtainedFiveStars = [];
+let inventoryItems = [];
+
+const threeStar = [
+"💋 Kiss kiss kiss!",
+"🎮 Gamers!",
+"🎬 Movie night",
+"🕯 Tasty dinner",
+"🌙 Sweet dreams"
+];
+
+const fourStar = [
+"💎 Shiny rocks!",
+"💄 Cosplay Mode Activated",
+"🎵 Music Time"
+];
+
+const fiveStar = [
+"🔥 Valentine Special Gift",
+"🌹 Private Event Unlock",
+"💖 2000 Hearts Bonus",
+];
+const itemDescriptions = {
+"💋 Kiss kiss kiss!":
+"Wanna kiss you everywhere (literally :3)",
+
+"🎮 Gamers!":
+"Love playing games with you! Let's Skyrim together xoxo",
+
+"🎬 Movie night":
+"Wrapped in blankets... What a night for Lord of the Rings!",
+
+"🕯 Tasty dinner":
+"You know what we gonna eat, don't you? :)",
+
+"🌙 Sweet dreams":
+"Let's cuddle and slowly fall asleep... Love this so much...",
+
+"💎 Shiny rocks!":
+"What is that thing in the dirt?.. For you!!!",
+
+"💄 Cosplay Mode Activated":
+"Woah... Seems like you want to take it off me now",
+
+"🎵 Music Time":
+"Nice and calm, I can feel it",
+
+"🔥 Valentine Special Gift":
+"It's kinda spicy",
+
+"🌹 Private Event Unlock":
+"A hidden gem now revealed only for you"
+};
+
+function unlock() {
+    const unlockSound = document.getElementById("unlockSound");
+    const music = document.getElementById("backMusic");
+    const lock = document.getElementById("lockScreen");
+
+    unlockSound.play();
+    
+    music.volume = 0.2;
+
+    // Запускаем fade
+    setTimeout(() => {
+        lock.classList.add("fade-out");
+    }, 300);
+
+    // Ждём 300ms + 800ms (длительность fade)
+    setTimeout(() => {
+        music.play();
+    }, 1100);
+}
+
+function wish() {
+
+    const sound = document.getElementById("unlockSound");
+    sound.currentTime = 0;
+    sound.play();
+
+    if (wishesAvailable <= 0) return;
+
+    wishesAvailable--;
+    updateWishDisplay();
+
+    pity4++;
+    pity5++;
+
+    let resultText = "";
+    let roll = Math.random() * 100;
+
+    // доступные 5⭐ (без повторов)
+    let fiveStarAvailable = fiveStar.filter(item =>
+        !obtainedFiveStars.includes(item)
+    );
+
+    /* =========================
+       ⭐⭐⭐⭐⭐ 5 STAR LOGIC
+    ========================== */
+
+    if (pity5 >= 10 && fiveStarAvailable.length > 0) {
+
+        let reward = randomItem(fiveStarAvailable);
+        resultText = "⭐⭐⭐⭐⭐ " + reward;
+
+        obtainedFiveStars.push(reward);
+        pity5 = 0;
+        pity4 = 0;
+
+    } else if (roll < 10 && fiveStarAvailable.length > 0) {
+        // 10% шанс раннего 5⭐
+
+        let reward = randomItem(fiveStarAvailable);
+        resultText = "⭐⭐⭐⭐⭐ " + reward;
+
+        obtainedFiveStars.push(reward);
+        pity5 = 0;
+        pity4 = 0;
+    }
+
+    /* =========================
+       ⭐⭐⭐⭐ 4 STAR LOGIC
+    ========================== */
+
+    else if (pity4 >= 5) {
+
+        resultText = "⭐⭐⭐⭐ " + randomItem(fourStar);
+        pity4 = 0;
+
+    } else if (roll < 45) {
+        // 35% шанс (45 - 10% занятые 5⭐)
+
+        resultText = "⭐⭐⭐⭐ " + randomItem(fourStar);
+        pity4 = 0;
+    }
+
+    /* =========================
+       ⭐⭐⭐ 3 STAR
+    ========================== */
+
+    else {
+        resultText = "⭐⭐⭐ " + randomItem(threeStar);
+    }
+
+    /* =========================
+       АНИМАЦИЯ
+    ========================== */
+
+    const anim = document.getElementById("wishAnimation");
+    anim.classList.remove("hidden");
+
+    setTimeout(() => {
+
+        anim.classList.add("hidden");
+
+        // 💖 начисление 2000 hearts
+        if (resultText.includes("2000 Hearts Bonus")) {
+            wishesAvailable += 2000;
+            updateWishDisplay();
+        }
+
+        // очищаем название
+        let cleanName = resultText
+            .replace(/⭐+/g, "")
+            .trim();
+
+        // добавляем в инвентарь (кроме бонуса)
+        if (!cleanName.includes("2000 Hearts Bonus")) {
+            addToInventory(cleanName);
+        }
+
+        // описание
+        let description = itemDescriptions[cleanName] || "";
+
+        // вывод результата
+        document.getElementById("resultText").innerHTML = `
+            <div style="font-size:32px;">${resultText}</div>
+            <div style="font-size:18px; margin-top:15px; opacity:0.85;">
+                ${description}
+            </div>
+        `;
+
+        document.getElementById("resultScreen").classList.remove("hidden");
+
+    }, 2000);
+}
+function randomItem(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
+function getFiveStar() {
+    return "⭐⭐⭐⭐⭐ " + randomItem(fiveStar) + "<br><br>✨ LIMITED DROP ✨";
+}
+
+function closeResult() {
+    document.getElementById("resultScreen").classList.add("hidden");
+}
+
+function updatePurchaseButton() {
+    const btn = document.getElementById("purchaseBtn");
+    if (!btn) return;
+
+    if (wishesAvailable >= 2004) {
+        btn.classList.remove("disabled");
+        btn.disabled = false;
+    } else {
+        btn.classList.add("disabled");
+        btn.disabled = true;
+    }
+}
+
+function updateWishDisplay() {
+    document.getElementById("wishCount").innerText = wishesAvailable;
+
+    const btn = document.querySelector(".wish-btn");
+
+    if (wishesAvailable <= 0) {
+        btn.style.opacity = "0.5";
+        btn.style.pointerEvents = "none";
+    } else {
+        btn.style.opacity = "1";
+        btn.style.pointerEvents = "auto";
+    }
+     updatePurchaseButton();
+    
+}
+window.onload = function() {
+    updateWishDisplay();
+    updatePurchaseButton();
+};
+
+function openShop() {
+    document.getElementById("shopOverlay").classList.remove("hidden");
+}
+
+function closeShop() {
+    document.getElementById("shopOverlay").classList.add("hidden");
+}
+
+function showSection(sectionId) {
+
+    // скрываем все
+    document.querySelectorAll(".shop-section").forEach(sec => {
+        sec.classList.add("hidden");
+    });
+
+    document.querySelectorAll(".shop-tab").forEach(tab => {
+        tab.classList.remove("active");
+    });
+
+    // показываем выбранный
+    document.getElementById(sectionId).classList.remove("hidden");
+
+    event.target.classList.add("active");
+}
+function buyHearts(amount) {
+    wishesAvailable += amount;
+    updateWishDisplay();
+    updatePurchaseButton(); // ← ДОБАВЬ ЭТУ СТРОКУ
+
+    // лёгкий эффект "покупка"
+    const cards = document.querySelectorAll(".shop-card");
+    cards.forEach(card => {
+        card.style.transform = "scale(0.95)";
+    });
+
+    setTimeout(() => {
+        cards.forEach(card => {
+            card.style.transform = "scale(1)";
+        });
+    }, 120);
+}
+function purchaseOutfit() {
+
+    if (wishesAvailable >= 2004) {
+
+        wishesAvailable -= 2004;
+        updateWishDisplay();
+        updatePurchaseButton();
+
+        const outfitName = "Moonlit Serenade Outfit";
+
+        // ❌ если уже куплен — не добавляем второй раз
+        if (!inventoryItems.some(item => item.name === outfitName)) {
+
+            inventoryItems.push({
+    name: outfitName,
+    stars: "⭐⭐⭐⭐⭐",
+    image: "moonlit.png",
+    story: `
+        In the glow of lights, she waits — wrapped in elegance and quiet warmth.
+        <br><br>
+        The Moonlit Serenade outfit is not just attire, but a promise of a night
+        filled with golden reflections and whispered words.
+        <br><br>
+        A memory created beneath the stars...
+    `
+});
+        }
+
+        alert("✨ Outfit Unlocked!");
+    }
+}
+function openInventory() {
+    document.getElementById("inventoryOverlay").classList.remove("hidden");
+    renderInventory();
+}
+
+function closeInventory() {
+    document.getElementById("inventoryOverlay").classList.add("hidden");
+}
+
+function renderInventory() {
+    const grid = document.getElementById("inventoryGrid");
+    grid.innerHTML = "";
+
+    inventoryItems.forEach((item, index) => {
+        const card = document.createElement("div");
+        card.className = "shop-card";
+        card.innerHTML = `
+            <div class="shop-amount">${item.name}</div>
+        `;
+        card.onclick = () => openItem(index);
+        grid.appendChild(card);
+    });
+}
+function openItem(index) {
+
+    const item = inventoryItems[index];
+
+    document.getElementById("modalTitle").innerText = item.name;
+
+    const container = document.getElementById("modalDynamicContent");
+
+    let mediaBlock = "";
+
+    // если есть видео → кнопка
+    if (item.video) {
+        mediaBlock = `
+            <a href="${item.video}" target="_blank" class="yt-button">
+                ▶ Watch on YouTube
+            </a>
+        `;
+    }
+
+    // если есть картинка
+    if (item.image) {
+        container.innerHTML = `
+            <div class="item-layout">
+                <img src="${item.image}">
+                <div class="item-story">
+                    ${item.story || ""}
+                    ${mediaBlock}
+                </div>
+            </div>
+        `;
+    }
+
+    // если нет картинки
+    else {
+        container.innerHTML = `
+            <div class="item-story" style="text-align:center;">
+                ${item.story || ""}
+                ${mediaBlock}
+            </div>
+        `;
+    }
+
+    document.getElementById("itemModal").classList.remove("hidden");
+}
+
+function closeItemModal() {
+
+    document.getElementById("itemModal").classList.add("hidden");
+
+    document.getElementById("modalVideo").src = "";
+    document.getElementById("modalImage").src = "";
+
+    document.getElementById("modalVideo").style.display = "none";
+    document.getElementById("modalImage").style.display = "none";
+}
+
+function addToInventory(name) {
+
+    if (inventoryItems.some(item => item.name === name)) {
+        return;
+    }
+
+    let videoLink = "";
+    let imageLink = "";
+
+    // 🎥 Видео предметы
+    if (name.includes("Private Event Unlock")) {
+        videoLink = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+    }
+
+    if (name.includes("Music Time")) {
+        videoLink = "https://www.youtube.com/watch?v=50p8wxrRFrc";
+    }
+
+    // 🖼 Картинки (если нет видео)
+    if (name.includes("Valentine Special Gift")) {
+        imageLink = "valentine.png";
+    }
+    if (name.includes("Kiss kiss kiss!")) {
+        imageLink = "kiss.png";
+    }
+      if (name.includes("Gamers!")) {
+        imageLink = "game.png";
+    }
+     if (name.includes("Movie night")) {
+        imageLink = "movie.png";
+    }
+     if (name.includes("Tasty dinner")) {
+        imageLink = "dinner.png";
+    }
+      if (name.includes("Sweet dreams")) {
+        imageLink = "sleep.png";
+    }
+     if (name.includes("Shiny rocks!")) {
+        imageLink = "stone.png";
+    }
+    if (name.includes("Cosplay Mode Activated")) {
+        imageLink = "valentine.png";
+    }
+
+    inventoryItems.push({
+        name: name,
+        video: videoLink,
+        image: imageLink,
+        story: itemDescriptions[name] || ""
+    });
+
+    renderInventory();
+}
+</script>
+<div class="wish-panel">
+    <button class="wish-btn" onclick="wish()">
+        <span class="wish-text">Wish</span>
+        <div class="wish-cost">
+            <img src="wish-icon.png" class="wish-icon">
+            <span>x1</span>
+        </div>
+    </button>
+</div>
+
+<div id="wishAnimation" class="overlay hidden">
+    <div class="spin-circle"></div>
+</div>
+
+<div id="resultScreen" class="overlay hidden" onclick="closeResult()">
+    <div id="resultText" class="result-box"></div>
+</div>
+
+<div class="top-bar">
+    <img src="wish-icon.png" class="top-icon">
+    <span id="wishCount">0</span>
+</div>
+
+<div class="shop-button-wrapper">
+    <button class="shop-btn" onclick="openShop()">Shop</button>
+    <button class="shop-btn" onclick="openInventory()" style="margin-left:15px;">
+        Inventory
+    </button>
+</div>
+
+<div id="shopOverlay" class="overlay hidden">
+
+    <div class="shop-window">
+
+        <!-- Левая панель -->
+        <div class="shop-menu">
+            <div class="shop-tab active" onclick="showSection('topup')">
+                Hearts Top-Up
+            </div>
+
+            <div class="shop-tab" onclick="showSection('recommended')">
+                Recommended
+            </div>
+        </div>
+
+        <!-- Правая часть -->
+        <div class="shop-content">
+        <button class="close-shop" onclick="closeShop()">✕</button>  
+
+            <!-- TOP UP -->
+            <div id="topup" class="shop-section">
+                <h2>Available packs</h2>
+
+                <div class="shop-grid">
+    <div class="shop-card" onclick="buyHearts(1)">
+        <img src="wish-icon.png" class="shop-img">
+        <div class="shop-amount">1 Heart</div>
+    </div>
+
+    <div class="shop-card" onclick="buyHearts(5)">
+        <img src="wish-icon2.png" class="shop-img">
+        <div class="shop-amount">5 Hearts</div>
+    </div>
+
+    <div class="shop-card" onclick="buyHearts(10)">
+        <img src="wish-icon3.png" class="shop-img">
+        <div class="shop-amount">10 Hearts</div>
+    </div>
+</div>
+            </div>
+
+            <!-- RECOMMENDED -->
+            <div id="recommended" class="shop-section hidden">
+    <div class="big-offer-card">
+        <img src="outfit.png">
+        <button id="purchaseBtn" class="purchase-btn" onclick="purchaseOutfit()">
+            Purchase
+        </button>
+    </div>
+</div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="inventoryOverlay" class="overlay hidden">
+
+    <div class="shop-window" style="background: rgba(38, 0, 24, 0.95);">
+
+        <button class="close-shop" onclick="closeInventory()">✕</button>
+
+        <div class="shop-content">
+            <h2>Your Inventory</h2>
+
+            <div id="inventoryGrid" class="shop-grid">
+                <!-- предметы будут добавляться сюда -->
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<div id="itemModal" class="overlay hidden" onclick="closeItemModal()">
+    <div class="item-modal-content" onclick="event.stopPropagation()">
+
+        <h2 id="modalTitle"></h2>
+
+        <div id="modalDynamicContent"></div>
+
+    </div>
+</div>
+
+</div>
+</body>
+</html>
